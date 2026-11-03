@@ -1,0 +1,12 @@
+@model AcxiomCRM.Controllers.LeadAssignmentInput
+@{ ViewData["Title"] = "Assign lead"; }
+<div class="page-heading"><div><span class="eyebrow">LEADS</span><h1>Assign lead</h1><p>Change who owns this lead.</p></div><a class="btn btn-light" asp-action="Index">Back to leads</a></div>
+<div class="panel-card form-card">
+    <form asp-action="Assign" asp-route-id="@Model.LeadId" method="post">
+        <input asp-for="LeadId" type="hidden" />
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+        <div class="mb-3"><label asp-for="OwnerUserId" class="form-label">Assign to</label><select asp-for="OwnerUserId" class="form-select"><option value="">Choose a team member</option>@foreach (var person in (IEnumerable<AcxiomCRM.Models.ApplicationUser>)ViewBag.Assignees) { <option value="@person.Id">@person.FullName — @person.Email</option> }</select><span asp-validation-for="OwnerUserId" class="text-danger"></span></div>
+        <div class="form-actions"><a class="btn btn-light" asp-action="Index">Cancel</a><button class="btn btn-primary">Save assignment</button></div>
+    </form>
+</div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

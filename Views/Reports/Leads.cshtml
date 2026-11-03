@@ -1,0 +1,4 @@
+@model IEnumerable<AcxiomCRM.Models.Lead>
+@{ ViewData["Title"] = "Lead report"; }
+<div class="page-heading"><div><span class="eyebrow">REPORTS</span><h1>Lead report</h1><p>Active leads grouped by current status.</p></div><a class="btn btn-light" asp-action="Index">All reports</a></div>
+<div class="panel-card"><div class="table-responsive"><table class="table"><thead><tr><th>Lead</th><th>Company</th><th>Status</th><th>Created</th></tr></thead><tbody>@foreach (var lead in Model) { <tr><td><a asp-controller="Leads" asp-action="Details" asp-route-id="@lead.Id">@lead.Name</a></td><td>@lead.Company</td><td><span class="status-pill">@lead.Status</span></td><td>@lead.CreatedAtUtc.ToLocalTime().ToString("MMM d, yyyy")</td></tr> }@if (!Model.Any()) { <tr><td colspan="4" class="empty-state">No lead records found.</td></tr> }</tbody></table></div></div>

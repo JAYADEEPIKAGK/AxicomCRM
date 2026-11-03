@@ -1,0 +1,4 @@
+@model IEnumerable<AcxiomCRM.Models.AuditLog>
+@{ ViewData["Title"] = "Customer history"; }
+<div class="page-heading"><div><span class="eyebrow">CUSTOMERS</span><h1>Customer history</h1><p>Recorded changes and interactions for this customer.</p></div><a class="btn btn-light" asp-action="Index">Back to customers</a></div>
+<div class="panel-card"><div class="table-responsive"><table class="table"><thead><tr><th>When</th><th>Activity</th><th>User</th><th>Details</th></tr></thead><tbody>@foreach (var row in Model) { <tr><td>@row.CreatedAtUtc.ToLocalTime().ToString("MMM d, yyyy h:mm tt")</td><td>@row.Action</td><td>@row.UserName</td><td>@row.Details</td></tr> }@if (!Model.Any()) { <tr><td colspan="4" class="empty-state">No history recorded yet.</td></tr> }</tbody></table></div></div>

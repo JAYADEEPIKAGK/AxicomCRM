@@ -1,0 +1,31 @@
+@model AcxiomCRM.Controllers.HomeController.DashboardViewModel
+@using System.Text.Json
+@{ ViewData["Title"] = "Overview"; }
+<div class="page-heading"><div><span class="eyebrow">YOUR BUSINESS AT A GLANCE</span><h1>Dashboard</h1><p>Track progress and stay ahead of every opportunity.</p></div><a class="btn btn-primary" asp-controller="Leads" asp-action="Create">+ New lead</a></div>
+<div class="row g-3 mb-4">
+    <div class="col-6 col-xl-3"><div class="metric-card"><span>Customers</span><strong>@Model.Customers</strong><small>Active relationships</small></div></div>
+    <div class="col-6 col-xl-3"><div class="metric-card"><span>Open leads</span><strong>@Model.OpenLeads</strong><small>of @Model.Leads total leads</small></div></div>
+    <div class="col-6 col-xl-3"><div class="metric-card"><span>Open opportunities</span><strong>@Model.OpenOpportunities</strong><small>@Model.Opportunities total opportunities</small></div></div>
+    <div class="col-6 col-xl-3"><div class="metric-card"><span>Pipeline value</span><strong>@Model.Pipeline.ToString("C0")</strong><small>@Model.Won won · @Model.Lost lost</small></div></div>
+</div>
+<div class="row g-3 mb-4">
+    <div class="col-lg-4"><div class="panel-card chart-card"><h2>Lead status</h2><canvas id="leadsChart"></canvas></div></div>
+    <div class="col-lg-4"><div class="panel-card chart-card"><h2>Opportunity pipeline</h2><canvas id="pipelineChart"></canvas></div></div>
+    <div class="col-lg-4"><div class="panel-card chart-card"><h2>Monthly sales</h2><canvas id="salesChart"></canvas></div></div>
+</div>
+<div class="panel-card"><div class="panel-heading"><div><h2>Upcoming follow-ups</h2><p>Your next customer touchpoints</p></div><a asp-controller="FollowUps" asp-action="Index">View all →</a></div>
+    @if (Model.UpcomingFollowUps.Count == 0) { <div class="empty-state">No upcoming follow-ups. <a asp-controller="FollowUps" asp-action="Create">Schedule one</a>.</div> }
+    else { <div class="table-responsive"><table class="table align-middle"><thead><tr><th>Subject</th><th>Due</th><th>Related to</th></tr></thead><tbody>@foreach (var item in Model.UpcomingFollowUps) { <tr><td class="fw-semibold">@item.Subject</td><td>@item.DueAt.ToString("MMM d, yyyy h:mm tt")</td><td>@(item.Customer?.Name ?? item.Lead?.Name ?? "—")</td></tr> }</tbody></table></div> }
+</div>
+@section Scripts {
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const chartColors = ['#4867e8','#21a67a','#f0a43a','#8e67d5','#e26b75','#53a6ba'];
+function renderChart(id, type, points, money=false) {
+    new Chart(document.getElementById(id), { type, data: { labels: points.map(p=>p.label), datasets: [{ data: points.map(p=>p.value), backgroundColor: chartColors, borderColor: '#4867e8', borderWidth: 2, borderRadius: 6, tension: .35, fill: type === 'line' }] }, options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:type==='doughnut',position:'bottom'}}, scales:type==='bar'||type==='line'?{y:{beginAtZero:true,ticks:{callback:v=>money?'$'+Number(v).toLocaleString():v}}}:{} } });
+}
+renderChart('leadsChart','doughnut',@Html.Raw(JsonSerializer.Serialize(Model.LeadByStatus.Select(p => new { label=p.Label, value=p.Value }))));
+renderChart('pipelineChart','bar',@Html.Raw(JsonSerializer.Serialize(Model.OpportunitiesByStage.Select(p => new { label=p.Label, value=p.Value }))));
+renderChart('salesChart','line',@Html.Raw(JsonSerializer.Serialize(Model.MonthlySales.Select(p => new { label=p.Label, value=p.Value }))),true);
+</script>
+}

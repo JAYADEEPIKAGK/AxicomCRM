@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - AcxiomCRM</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <div class="app-shell">
+            <aside class="sidebar">
+                <a class="brand" asp-controller="Home" asp-action="Dashboard"><span class="brand-mark">A</span> AcxiomCRM</a>
+                <div class="sidebar-caption">WORKSPACE</div>
+                <nav class="nav flex-column">
+                    <a class="nav-link" asp-controller="Home" asp-action="Dashboard">Overview</a>
+                    <a class="nav-link" asp-controller="Customers" asp-action="Index">Customers</a>
+                    <a class="nav-link" asp-controller="Leads" asp-action="Index">Leads</a>
+                    <a class="nav-link" asp-controller="Opportunities" asp-action="Index">Opportunities</a>
+                    <a class="nav-link" asp-controller="FollowUps" asp-action="Index">Follow-ups</a>
+                    <a class="nav-link" asp-controller="Activities" asp-action="Index">Activities</a>
+                    <a class="nav-link" asp-controller="Reports" asp-action="Index">Reports</a>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <div class="sidebar-caption mt-4">ADMINISTRATION</div>
+                        <a class="nav-link" asp-controller="Users" asp-action="Index">Users &amp; roles</a>
+                        <a class="nav-link" asp-controller="Reports" asp-action="Audit">Audit log</a>
+                    }
+                </nav>
+                <div class="sidebar-user">
+                    <div class="avatar">@User.Identity.Name?.Substring(0, 1).ToUpperInvariant()</div>
+                    <div class="user-summary"><strong>@User.Identity.Name</strong><small>@(User.IsInRole("Admin") ? "Administrator" : User.IsInRole("Manager") ? "Manager" : "Sales Executive")</small></div>
+                    <form asp-controller="Account" asp-action="Logout" method="post"><button class="btn btn-sm btn-outline-light" title="Sign out">↗</button></form>
+                </div>
+            </aside>
+            <main class="main-content">
+                <header class="topbar"><div><span class="topbar-label">ACXIOMCRM /</span> @ViewData["Title"]</div><span class="text-secondary small">@DateTime.Today.ToString("dddd, MMMM d, yyyy")</span></header>
+                @if (TempData["Success"] is string success) { <div class="alert alert-success alert-dismissible fade show" role="alert">@success<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div> }
+                @if (TempData["Error"] is string error) { <div class="alert alert-danger alert-dismissible fade show" role="alert">@error<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div> }
+                <section class="page-content">@RenderBody()</section>
+                <footer class="app-footer">AcxiomCRM <span>•</span> Customer relationships, made clearer.</footer>
+            </main>
+        </div>
+    }
+    else
+    {
+        <main class="auth-shell">@RenderBody()</main>
+    }
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,11 @@
+@model IEnumerable<AcxiomCRM.Models.Customer>
+@{ ViewData["Title"] = "Customers"; }
+<div class="page-heading"><div><span class="eyebrow">RELATIONSHIPS</span><h1>Customers</h1><p>Keep customer information organized and up to date.</p></div><a class="btn btn-primary" asp-action="Create">+ Add customer</a></div>
+<div class="panel-card">
+    <form method="get" class="filter-row mb-3"><input name="search" value="@ViewBag.Search" class="form-control" placeholder="Search name, company or email" /><button class="btn btn-outline-primary">Search</button>@if (ViewBag.Search != null) { <a class="btn btn-light" asp-action="Index">Clear</a> }</form>
+    <div class="table-responsive"><table class="table align-middle"><thead><tr><th>Customer</th><th>Company</th><th>Email</th><th>Phone</th><th></th></tr></thead><tbody>
+    @foreach (var item in Model) { <tr><td class="fw-semibold"><a asp-action="Details" asp-route-id="@item.Id">@item.Name</a></td><td>@item.Company</td><td>@item.Email</td><td>@item.Phone</td><td class="text-end"><a class="btn btn-sm btn-light" asp-action="Edit" asp-route-id="@item.Id">Edit</a><a class="btn btn-sm btn-light ms-1" asp-action="History" asp-route-id="@item.Id">History</a><form asp-action="Deactivate" asp-route-id="@item.Id" method="post" class="d-inline" onsubmit="return confirm('Deactivate this customer?')"><button class="btn btn-sm btn-outline-danger ms-1">Deactivate</button></form></td></tr> }
+    @if (!Model.Any()) { <tr><td colspan="5"><div class="empty-state">No customers found. Add your first customer to get started.</div></td></tr> }
+    </tbody></table></div>
+    <nav aria-label="Customer pages"><ul class="pagination pagination-sm justify-content-end">@for (var p = 1; p <= (int)ViewBag.TotalPages; p++) { <li class="page-item @(p == (int)ViewBag.Page ? "active" : "")"><a class="page-link" asp-action="Index" asp-route-page="@p" asp-route-search="@ViewBag.Search">@p</a></li> }</ul></nav>
+</div>

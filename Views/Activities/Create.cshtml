@@ -1,0 +1,23 @@
+@model AcxiomCRM.Models.Activity
+@{ ViewData["Title"] = "Log activity"; }
+<div class="page-heading">
+    <div><span class="eyebrow">ACTIVITIES</span><h1>Log activity</h1><p>Record an interaction or task.</p></div>
+    <a class="btn btn-light" asp-action="Index">Back to activities</a>
+</div>
+<div class="panel-card form-card">
+    <form asp-action="Create" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+        <div class="row g-3">
+            <div class="col-md-6"><label asp-for="Type" class="form-label"></label><select asp-for="Type" class="form-select"><option>Call</option><option>Meeting</option><option>Email</option><option>Task</option></select><span asp-validation-for="Type" class="text-danger"></span></div>
+            <div class="col-md-6"><label asp-for="Subject" class="form-label"></label><input asp-for="Subject" class="form-control" /><span asp-validation-for="Subject" class="text-danger"></span></div>
+            <div class="col-md-6"><label asp-for="CustomerId" class="form-label">Customer (optional)</label><select asp-for="CustomerId" class="form-select"><option value="">No customer selected</option>@foreach (var customer in (IEnumerable<AcxiomCRM.Models.Customer>)ViewBag.Customers) { <option value="@customer.Id">@customer.Name</option> }</select></div>
+            <div class="col-md-6"><label asp-for="LeadId" class="form-label">Lead (optional)</label><select asp-for="LeadId" class="form-select"><option value="">No lead selected</option>@foreach (var lead in (IEnumerable<AcxiomCRM.Models.Lead>)ViewBag.Leads) { <option value="@lead.Id">@lead.Name</option> }</select></div>
+            <div class="col-md-6"><label asp-for="OpportunityId" class="form-label">Opportunity (optional)</label><select asp-for="OpportunityId" class="form-select"><option value="">No opportunity selected</option>@foreach (var opportunity in (IEnumerable<AcxiomCRM.Models.Opportunity>)ViewBag.Opportunities) { <option value="@opportunity.Id">@opportunity.Name</option> }</select></div>
+            <div class="col-12"><label asp-for="Details" class="form-label"></label><textarea asp-for="Details" class="form-control" rows="4"></textarea><span asp-validation-for="Details" class="text-danger"></span></div>
+        </div>
+        <div class="form-actions"><a class="btn btn-light" asp-action="Index">Cancel</a><button class="btn btn-primary">Save activity</button></div>
+    </form>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

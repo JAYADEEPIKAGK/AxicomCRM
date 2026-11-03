@@ -1,0 +1,4 @@
+@model IEnumerable<AcxiomCRM.Models.Customer>
+@{ ViewData["Title"] = "Customer report"; }
+<div class="page-heading"><div><span class="eyebrow">REPORTS</span><h1>Customer report</h1><p>@Model.Count() active customers in your accessible portfolio.</p></div><a class="btn btn-light" asp-action="Index">All reports</a></div>
+<div class="panel-card"><div class="table-responsive"><table class="table"><thead><tr><th>Customer</th><th>Company</th><th>Email</th><th>Phone</th><th>Created</th></tr></thead><tbody>@foreach (var customer in Model) { <tr><td><a asp-controller="Customers" asp-action="Details" asp-route-id="@customer.Id">@customer.Name</a></td><td>@customer.Company</td><td>@customer.Email</td><td>@customer.Phone</td><td>@customer.CreatedAtUtc.ToLocalTime().ToString("MMM d, yyyy")</td></tr> }@if (!Model.Any()) { <tr><td colspan="5" class="empty-state">No customer records found.</td></tr> }</tbody></table></div></div>

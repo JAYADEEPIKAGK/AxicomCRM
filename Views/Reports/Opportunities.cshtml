@@ -1,0 +1,4 @@
+@model IEnumerable<AcxiomCRM.Models.Opportunity>
+@{ ViewData["Title"] = "Opportunity report"; }
+<div class="page-heading"><div><span class="eyebrow">REPORTS</span><h1>Opportunity report</h1><p>Active deals by stage, value, and close date.</p></div><a class="btn btn-light" asp-action="Index">All reports</a></div>
+<div class="panel-card"><div class="table-responsive"><table class="table"><thead><tr><th>Opportunity</th><th>Customer</th><th>Stage</th><th>Amount</th><th>Probability</th><th>Expected close</th></tr></thead><tbody>@foreach (var item in Model) { <tr><td><a asp-controller="Opportunities" asp-action="Details" asp-route-id="@item.Id">@item.Name</a></td><td>@item.Customer?.Name</td><td>@item.Stage</td><td>@item.Amount.ToString("C")</td><td>@item.Probability%</td><td>@item.ExpectedCloseDate.ToString("MMM d, yyyy")</td></tr> }@if (!Model.Any()) { <tr><td colspan="6" class="empty-state">No opportunities found.</td></tr> }</tbody></table></div></div>

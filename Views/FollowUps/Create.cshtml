@@ -1,0 +1,21 @@
+@model AcxiomCRM.Models.FollowUp
+@{ ViewData["Title"] = "Schedule follow-up"; }
+<div class="page-heading">
+    <div><span class="eyebrow">FOLLOW-UPS</span><h1>Schedule follow-up</h1><p>Plan your next customer touchpoint.</p></div>
+    <a class="btn btn-light" asp-action="Index">Back to follow-ups</a>
+</div>
+<div class="panel-card form-card">
+    <form asp-action="Create" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+        <div class="row g-3">
+            <div class="col-12"><label asp-for="Subject" class="form-label"></label><input asp-for="Subject" class="form-control" /><span asp-validation-for="Subject" class="text-danger"></span></div>
+            <div class="col-md-6"><label asp-for="DueAt" class="form-label"></label><input asp-for="DueAt" class="form-control" type="datetime-local" min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" /><span asp-validation-for="DueAt" class="text-danger"></span></div>
+            <div class="col-md-6"><label asp-for="CustomerId" class="form-label">Customer (optional)</label><select asp-for="CustomerId" class="form-select"><option value="">Select customer</option>@foreach (var customer in (IEnumerable<AcxiomCRM.Models.Customer>)ViewBag.Customers) { <option value="@customer.Id">@customer.Name</option> }</select><span asp-validation-for="CustomerId" class="text-danger"></span></div>
+            <div class="col-md-6"><label asp-for="LeadId" class="form-label">Lead (optional)</label><select asp-for="LeadId" class="form-select"><option value="">Select lead</option>@foreach (var lead in (IEnumerable<AcxiomCRM.Models.Lead>)ViewBag.Leads) { <option value="@lead.Id">@lead.Name</option> }</select><span asp-validation-for="LeadId" class="text-danger"></span></div>
+        </div>
+        <div class="form-actions"><a class="btn btn-light" asp-action="Index">Cancel</a><button class="btn btn-primary">Schedule</button></div>
+    </form>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

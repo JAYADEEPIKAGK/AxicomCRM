@@ -1,0 +1,11 @@
+@model AcxiomCRM.Models.Opportunity
+@{ ViewData["Title"] = "New opportunity"; }
+<div class="page-heading"><div><span class="eyebrow">OPPORTUNITIES</span><h1>New opportunity</h1><p>Capture a potential sale in your pipeline.</p></div><a class="btn btn-light" asp-action="Index">Back to opportunities</a></div>
+<div class="panel-card form-card">
+    <form asp-action="Create" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+        <partial name="_OpportunityFields" model="Model" />
+        <div class="form-actions"><a class="btn btn-light" asp-action="Index">Cancel</a><button class="btn btn-primary">Save opportunity</button></div>
+    </form>
+</div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }
